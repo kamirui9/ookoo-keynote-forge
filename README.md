@@ -1,10 +1,10 @@
-# Keynote Forge · 发布会风格 PPT 生成器（PoC）
+# OokoO Keynote Forge · 发布会风格 PPT 生成器（PoC）
 
 输入一句话主题，生成新品发布会风格的图片版 PPTX。每页都是由百炼 Qwen-Image 整页生成的 16:9 图片。
 
 ## 工作方式
 
-1. **大纲**：`qwen-plus` 根据主题和风格生成统一视觉规范和逐页大纲（标题、副文案、画面描述），生成后可以在界面上编辑
+1. **大纲**：`qwen3.8-max` 根据主题和风格生成统一视觉规范和逐页大纲（标题、副文案、画面描述），生成后可以在界面上编辑
 2. **定风格**：先只生成封面，可以附修改意见重抽，满意后点“锁定风格”
 3. **批量生成**：其余页面以封面作为参考图，用 `qwen-image-3.0` 图生图生成，保证整套风格一致；任意一页都能单独重抽
 4. **导出**：每页一张全屏图片，打包成 `.pptx`，标题和副文案写在备注里
@@ -28,7 +28,7 @@ MOCK_MODE=1 uv run python app.py
 |---|---|---|
 | `DASHSCOPE_API_KEY` | — | 百炼 API Key（北京地域） |
 | `DASHSCOPE_BASE_URL` | `https://dashscope.aliyuncs.com` | 可换成 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com` |
-| `TEXT_MODEL` | `qwen-plus` | 写大纲用的文本模型 |
+| `TEXT_MODEL` | `qwen3.8-max` | 写大纲用的文本模型（推理模型，大纲约需 1～3 分钟） |
 | `IMAGE_MODEL` | `qwen-image-3.0` | 生图模型，需要支持图生图（3.0 / 3.0-pro / 2.1 系列） |
 | `IMAGE_SIZE` | `2048*1152` | 16:9 |
 | `CONCURRENCY` | `3` | 同时生成的页数 |

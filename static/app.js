@@ -199,7 +199,7 @@ function updateControls() {
 function renderWork() {
   const p = state.p;
   const style = state.styles.find((s) => s.id === p.style_id);
-  $("#work-style").textContent = (style ? style.name : "自定义风格") + (p.custom_style ? " + 自定义" : "");
+  $("#work-style").textContent = style ? style.name + (p.custom_style ? " + 自定义" : "") : "自定义风格";
   $("#work-topic").textContent = p.topic;
   $("#style-guide").value = p.style_guide;
   renderCover();
@@ -345,6 +345,19 @@ document.addEventListener("click", (e) => {
 $("#lightbox").addEventListener("click", () => $("#lightbox").classList.add("hidden"));
 document.addEventListener("keydown", (e) => e.key === "Escape" && $("#lightbox").classList.add("hidden"));
 
+// ---------- 主题 ----------
+
+function setTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  localStorage.setItem("theme", theme);
+  document.querySelectorAll("#theme-toggle button").forEach((b) =>
+    b.classList.toggle("active", b.dataset.theme === theme));
+}
+
+document.querySelectorAll("#theme-toggle button").forEach((b) =>
+  b.addEventListener("click", () => setTheme(b.dataset.theme)));
+setTheme(document.documentElement.dataset.theme);
+
 // ---------- 路由 ----------
 
 async function route() {
@@ -381,6 +394,5 @@ window.addEventListener("hashchange", route);
     b.textContent = "未配置 DASHSCOPE_API_KEY：请复制 .env.example 为 .env 并填入百炼 API Key，然后重启服务。";
     b.classList.remove("hidden");
   }
-  $("#topbar-right").textContent = state.cfg.mock ? "Mock" : `${state.cfg.text_model} · ${state.cfg.image_model}`;
   route();
 })();

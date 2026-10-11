@@ -3,15 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Keynote Forge · 发布会 PPT 生成器</title>
+<title>OokoO Keynote Forge · 发布会 PPT 生成器</title>
+<link rel="icon" href="/img/logo.png">
+<script>document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";</script>
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 <div id="banner" class="banner hidden"></div>
 
 <header class="topbar">
-  <a class="brand" href="#" id="home-link"><span class="dot"></span>Keynote Forge</a>
-  <div class="topbar-right" id="topbar-right"></div>
+  <a class="brand" href="#" id="home-link"><img src="/img/logo.png" alt="OokoO"><span><b>OokoO</b> Keynote Forge</span></a>
+  <div class="topbar-right">
+    <div class="theme-toggle" id="theme-toggle">
+      <button type="button" data-theme="light">白色</button>
+      <button type="button" data-theme="dark">黑色</button>
+    </div>
+  </div>
 </header>
 
 <!-- 首页 -->
