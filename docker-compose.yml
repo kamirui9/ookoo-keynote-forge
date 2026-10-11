@@ -1,0 +1,25 @@
+name: ookoo-keynote-forge
+
+services:
+  keynote-forge:
+    build:
+      context: .
+      args:
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.12-slim}
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.org/simple}
+    image: ookoo-keynote-forge:latest
+    container_name: ookoo-keynote-forge
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # 容器内固定值，不受 .env 影响
+      HOST: 0.0.0.0
+      PORT: 8765
+      PROJECTS_DIR: /data/projects
+    ports:
+      - "${PUBLISH_PORT:-8765}:8765"
+    volumes:
+      - keynote-data:/data
+
+volumes:
+  keynote-data:

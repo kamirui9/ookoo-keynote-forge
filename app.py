@@ -1,11 +1,13 @@
 """发布会风格 PPT 生成器 — 本地 Web 服务。运行：uv run python app.py"""
 
 import asyncio
+import base64
+import secrets
 from collections import defaultdict
 from contextlib import asynccontextmanager
 
 import uvicorn
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -28,6 +30,30 @@ async def lifespan(_app: FastAPI):
 
 
 app = FastAPI(title="发布会 PPT 生成器", lifespan=lifespan)
+
+
+@app.middleware("http")
+async def basic_auth(request: Request, call_next):
+    if not (config.AUTH_USER and config.AUTH_PASSWORD) or request.url.path == "/healthz":
+        return await call_next(request)
+    user, password = "", ""
+    scheme, _, encoded = request.headers.get("authorization", "").partition(" ")
+    if scheme.lower() == "basic":
+        try:
+            user, _, password = base64.b64decode(encoded).decode().partition(":")
+        except (ValueError, UnicodeDecodeError):
+            pass
+    if secrets.compare_digest(user.encode(), config.AUTH_USER.encode()) & secrets.compare_digest(
+        password.encode(), config.AUTH_PASSWORD.encode()
+    ):
+        return await call_next(request)
+    return Response("需要登录", status_code=401,
+                    headers={"WWW-Authenticate": 'Basic realm="OokoO Keynote Forge", charset="UTF-8"'})
+
+
+@app.get("/healthz")
+def healthz():
+    return {"ok": True}
 
 
 def _reset_interrupted():
@@ -269,5 +295,7 @@ app.mount("/", StaticFiles(directory=config.ROOT / "static", html=True), name="s
 
 if __name__ == "__main__":
     mode = "MOCK 模式" if config.MOCK_MODE else ("已配置 API Key" if config.API_KEY else "⚠ 未配置 API Key")
-    print(f"发布会 PPT 生成器：http://127.0.0.1:8765 （{mode}）")
-    uvicorn.run(app, host="127.0.0.1", port=8765)
+    auth = "已启用登录" if config.AUTH_USER and config.AUTH_PASSWORD else "未启用登录"
+    print(f"发布会 PPT 生成器：http://{config.HOST}:{config.PORT} （{mode}，{auth}）")
+    # 生成任务在进程内存中排队，只能单进程运行，不要开多个 worker
+    uvicorn.run(app, host=config.HOST, port=config.PORT)
