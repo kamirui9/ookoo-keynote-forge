@@ -3,3 +3,4 @@
 __pycache__/
 projects/
 *.pptx
+.DS_Store

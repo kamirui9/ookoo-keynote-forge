@@ -1,5 +1,5 @@
 [project]
-name = "launch-ppt"
+name = "ookoo-keynote-forge"
 version = "0.1.0"
 description = "发布会风格 PPT 生成器（PoC）"
 requires-python = ">=3.11"
