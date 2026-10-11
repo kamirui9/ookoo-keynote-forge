@@ -1,0 +1,13 @@
+[project]
+name = "launch-ppt"
+version = "0.1.0"
+description = "发布会风格 PPT 生成器（PoC）"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "httpx>=0.27",
+    "python-pptx>=1.0",
+    "pillow>=10.0",
+    "python-dotenv>=1.0",
+]

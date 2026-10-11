@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keynote Forge · 发布会 PPT 生成器</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div id="banner" class="banner hidden"></div>
+
+<header class="topbar">
+  <a class="brand" href="#" id="home-link"><span class="dot"></span>Keynote Forge</a>
+  <div class="topbar-right" id="topbar-right"></div>
+</header>
+
+<!-- 首页 -->
+<main id="view-home" class="view">
+  <section class="hero">
+    <p class="eyebrow">AI 发布会幻灯片</p>
+    <h1>一句话，<br>开一场发布会。</h1>
+    <p class="lead">先确认封面风格，再用它统一生成整套页面。</p>
+  </section>
+
+  <form id="create-form" class="panel create">
+    <label class="field">
+      <span>发布会主题</span>
+      <input name="topic" required maxlength="80" placeholder="例如：发布一款主打 30 天续航的智能手表 Aura Watch">
+    </label>
+    <label class="field">
+      <span>补充说明 <em>可选</em></span>
+      <textarea name="notes" rows="3" placeholder="核心卖点、参数、价格、目标人群、想强调的情绪……写得越具体，文案越准确"></textarea>
+    </label>
+
+    <div class="field">
+      <span>视觉风格</span>
+      <div id="style-grid" class="style-grid"></div>
+    </div>
+    <label class="field">
+      <span>自定义风格 <em>可选，可与上面的预设叠加</em></span>
+      <textarea name="custom_style" rows="2" placeholder="例如：以深海蓝为主色，带水波纹光影，标题用细长的衬线字体"></textarea>
+    </label>
+
+    <div class="row">
+      <label class="field inline">
+        <span>页数</span>
+        <input name="page_count" type="number" min="4" max="20" value="10">
+      </label>
+      <button class="btn primary big" type="submit" id="create-btn">生成大纲</button>
+    </div>
+  </form>
+
+  <section id="recent" class="recent hidden">
+    <h3>最近的项目</h3>
+    <ul id="recent-list"></ul>
+  </section>
+</main>
+
+<!-- 工作台 -->
+<main id="view-work" class="view hidden">
+  <div class="work-head">
+    <div>
+      <p class="eyebrow" id="work-style"></p>
+      <h2 id="work-topic"></h2>
+    </div>
+    <ol class="steps" id="steps">
+      <li data-step="1">编辑大纲</li>
+      <li data-step="2">锁定封面风格</li>
+      <li data-step="3">生成全部页面</li>
+    </ol>
+  </div>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h3>统一视觉规范</h3>
+      <span class="hint">会拼接到每一页的生图提示词中</span>
+    </div>
+    <textarea id="style-guide" rows="3"></textarea>
+  </section>
+
+  <section class="panel cover-panel">
+    <div class="panel-head">
+      <h3>① 封面 · 定风格</h3>
+      <span class="hint">满意后锁定，其余页面都会参考这张图的风格</span>
+    </div>
+    <div class="cover-body">
+      <div class="cover-frame" id="cover-frame"></div>
+      <div class="cover-side">
+        <div id="cover-fields"></div>
+        <label class="field">
+          <span>修改意见 <em>可选，重抽时使用</em></span>
+          <textarea id="cover-feedback" rows="2" placeholder="例如：背景再暗一些，产品放大，标题改成金色"></textarea>
+        </label>
+        <div class="row">
+          <button class="btn" id="cover-gen">生成封面</button>
+          <button class="btn primary" id="cover-lock" disabled>锁定风格</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h3>② 其余页面</h3>
+      <div class="row">
+        <button class="btn" id="add-slide">＋ 添加页面</button>
+        <button class="btn primary" id="gen-all" disabled>生成全部页面</button>
+      </div>
+    </div>
+    <div id="slide-grid" class="slide-grid"></div>
+  </section>
+
+  <div class="export-bar">
+    <span id="progress-text"></span>
+    <button class="btn primary big" id="export-btn" disabled>导出 PPTX</button>
+  </div>
+</main>
+
+<div id="lightbox" class="lightbox hidden"><img alt=""></div>
+<div id="toast" class="toast hidden"></div>
+
+<script src="/app.js"></script>
+</body>
+</html>
