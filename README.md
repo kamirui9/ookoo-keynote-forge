@@ -28,7 +28,7 @@ MOCK_MODE=1 uv run python app.py
 |---|---|---|
 | `DASHSCOPE_API_KEY` | — | 百炼 API Key（北京地域） |
 | `DASHSCOPE_BASE_URL` | `https://dashscope.aliyuncs.com` | 可换成 `https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com` |
-| `TEXT_MODEL` | `qwen3.8-max` | 写大纲用的文本模型（推理模型，大纲约需 1～3 分钟） |
+| `TEXT_MODEL` | `qwen3.8-max` | 写大纲用的文本模型（推理模型，6 页大纲实测约 4 分钟） |
 | `IMAGE_MODEL` | `qwen-image-3.0` | 生图模型，需要支持图生图（3.0 / 3.0-pro / 2.1 系列） |
 | `IMAGE_SIZE` | `2048*1152` | 16:9 |
 | `CONCURRENCY` | `3` | 同时生成的页数 |

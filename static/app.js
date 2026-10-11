@@ -69,7 +69,7 @@ $("#create-form").addEventListener("submit", async (e) => {
   if (state.styleId === "" && !f.get("custom_style").trim()) {
     return toast("选择“仅自定义”时，请填写自定义风格描述", true);
   }
-  const done = overlay("正在构思发布会的叙事和每一页画面…");
+  const done = overlay("正在构思发布会的叙事和每一页画面，大约需要 4～6 分钟，请不要关闭页面…");
   try {
     const p = await api("POST", "/api/projects", {
       topic: f.get("topic"),
