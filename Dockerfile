@@ -9,7 +9,6 @@ ENV PIP_INDEX_URL=${PIP_INDEX_URL} \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
-    UV_PROJECT_ENVIRONMENT=/opt/venv \
     PATH=/opt/venv/bin:$PATH \
     PYTHONUNBUFFERED=1
 
@@ -17,9 +16,14 @@ WORKDIR /app
 
 RUN pip install uv
 
-# 先只装依赖，代码改动时可以复用这一层缓存
+# 先只装依赖，代码改动时可以复用这一层缓存。
+# uv sync 会直接用 uv.lock 里记录的 pypi.org 下载地址、无视镜像源，
+# 所以先导出带哈希的依赖清单，再按 PIP_INDEX_URL 安装：版本和文件仍与 uv.lock 完全一致。
 COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-dev --no-install-project
+RUN uv export --frozen --no-dev --no-emit-project -o /tmp/requirements.txt \
+    && uv venv /opt/venv \
+    && uv pip install --python /opt/venv/bin/python --require-hashes -r /tmp/requirements.txt \
+    && rm /tmp/requirements.txt
 
 COPY app.py ./
 COPY core ./core

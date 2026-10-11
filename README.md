@@ -44,7 +44,14 @@ cd ookoo-keynote-forge
 cp .env.example .env
 ```
 
-编辑 `.env`：至少填写 `DASHSCOPE_API_KEY`、`AUTH_USER`、`AUTH_PASSWORD`。服务器在国内、拉取镜像或依赖很慢时，把 `PYTHON_IMAGE` 和 `PIP_INDEX_URL` 换成文件中注释给出的镜像源。然后启动：
+编辑 `.env`：至少填写 `DASHSCOPE_API_KEY`、`AUTH_USER`、`AUTH_PASSWORD`。
+
+构建时服务器需要下载两样东西：基础镜像 `python:3.12-slim`（来自 Docker Hub）和 Python 依赖包（来自 PyPI）。默认使用官方源；只有下载很慢或失败时，才需要在 `.env` 里修改：
+
+- `PIP_INDEX_URL`：依赖包的下载源，例如 `https://mirrors.aliyun.com/pypi/simple/`
+- `PYTHON_IMAGE`：基础镜像地址，换成公司或云厂商提供的 Docker 镜像站，例如 `<镜像站地址>/library/python:3.12-slim`
+
+改完后启动：
 
 ```bash
 docker compose up -d --build
