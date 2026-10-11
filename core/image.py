@@ -39,10 +39,11 @@ def build_prompt(style_guide: str, slide: dict, with_reference: bool, feedback: 
         lines.append(
             "【文字】画面上只出现以下文字，字形清晰准确、一字不差，排版大方："
             + "，".join(text_parts)
-            + "。除此之外不要出现任何其他文字。"
+            + "。除此之外，只允许出现【画面】中明确写出的文字（如屏幕显示内容、数据标签），"
+            "必须与描述完全一致；不要出现任何其他文字。"
         )
     else:
-        lines.append("【文字】画面上不要出现任何文字。")
+        lines.append("【文字】除【画面】中明确写出的文字外，不要出现任何文字。")
     if feedback.strip():
         lines.append(f"【修改要求】{feedback.strip()}")
     return "\n".join(lines)
