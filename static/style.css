@@ -69,6 +69,9 @@ em { font-style: normal; color: var(--muted); font-weight: 400; margin-left: 6px
   backdrop-filter: blur(12px); z-index: 10; }
 .brand { color: var(--text); text-decoration: none; font-weight: 600; letter-spacing: .3px; display: flex; align-items: center; gap: 10px; font-size: 16px; }
 .brand img { height: 32px; width: auto; display: block; }
+.brand .logo-dark,
+[data-theme="dark"] .brand .logo-light { display: none; }
+[data-theme="dark"] .brand .logo-dark { display: block; }
 .brand b { color: var(--accent); font-weight: 700; }
 .topbar-right { display: flex; align-items: center; gap: 12px; }
 

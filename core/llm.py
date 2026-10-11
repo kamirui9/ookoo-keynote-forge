@@ -48,7 +48,7 @@ OUTLINE_SYSTEM = """你是顶级科技公司发布会的创意总监，同时精
 
 async def _chat(messages: list[dict]) -> str:
     url = f"{config.BASE_URL}/compatible-mode/v1/chat/completions"
-    # 推理模型先思考再输出：qwen3.8-max 生成 6 页实测约 250 秒
+    # 留足余量：换成推理模型（如 qwen3.8-max）时，6 页大纲实测约 250 秒
     async with httpx.AsyncClient(timeout=600) as client:
         r = await client.post(
             url,
