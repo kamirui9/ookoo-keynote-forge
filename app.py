@@ -51,6 +51,16 @@ async def basic_auth(request: Request, call_next):
                     headers={"WWW-Authenticate": 'Basic realm="OokoO Keynote Forge", charset="UTF-8"'})
 
 
+@app.middleware("http")
+async def no_cache_assets(request: Request, call_next):
+    """页面、脚本和样式每次都要求浏览器确认是否有新版本，避免升级后仍运行旧脚本。
+    /files/ 下的图片文件名带版本号、内容不会变，不加限制。"""
+    response = await call_next(request)
+    if not request.url.path.startswith("/files/"):
+        response.headers.setdefault("Cache-Control", "no-cache")
+    return response
+
+
 @app.get("/healthz")
 def healthz():
     return {"ok": True}
