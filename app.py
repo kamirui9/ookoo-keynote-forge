@@ -15,7 +15,7 @@ from pydantic import BaseModel, Field
 from core import config, project as store
 from core.export import export_pptx
 from core.image import build_prompt, generate_image
-from core.llm import SLIDE_TYPES, generate_outline
+from core.llm import generate_outline
 from core.styles import STYLES, resolve_style
 
 _locks: dict[str, asyncio.Lock] = defaultdict(asyncio.Lock)
@@ -104,7 +104,6 @@ class CreateReq(BaseModel):
 
 class SlideIn(BaseModel):
     uid: str | None = None
-    type: str = "feature"
     title: str = ""
     subtitle: str = ""
     visual: str = ""
@@ -130,7 +129,6 @@ def get_config():
         "has_key": bool(config.API_KEY),
         "text_model": config.TEXT_MODEL,
         "image_model": config.IMAGE_MODEL,
-        "slide_types": SLIDE_TYPES,
     }
 
 
@@ -172,7 +170,7 @@ async def update_outline(pid: str, req: OutlineReq):
             data = s.model_dump()
             if s.uid and s.uid in old:
                 merged = old[s.uid]
-                merged.update({k: data[k] for k in ("type", "title", "subtitle", "visual")})
+                merged.update({k: data[k] for k in ("title", "subtitle", "visual")})
                 slides.append(merged)
             else:
                 slides.append(store.new_slide(data))

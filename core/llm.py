@@ -6,17 +6,6 @@ import httpx
 
 from . import config
 
-SLIDE_TYPES = {
-    "cover": "封面：产品名 + 一句 slogan，主视觉是产品英雄图",
-    "hook": "开场悬念：一句引发好奇的话，画面极简",
-    "feature": "核心卖点：一个卖点标题 + 一句解释，配合特写画面",
-    "spec": "参数大字报：一个巨大的数字或参数作为视觉主体",
-    "compare": "对比：新旧/竞品的直观对比画面",
-    "scene": "使用场景：产品在真实生活场景中",
-    "price": "价格与发售：价格、发售时间",
-    "ending": "结尾：品牌 slogan 或 Thank you",
-}
-
 OUTLINE_SYSTEM = """你是顶级科技公司发布会的创意总监，同时精通 AI 生图提示词。
 你要为一场新品发布会设计幻灯片。每一页都会用文生图模型整页生成为一张 16:9 图片，
 所以页面上的文字必须极短、醒目（生图模型渲染长文字容易出错）。
@@ -26,7 +15,6 @@ OUTLINE_SYSTEM = """你是顶级科技公司发布会的创意总监，同时精
   "style_guide": "统一视觉规范（150-300字）：背景、主色与点缀色、光影、材质、字体气质（如粗体无衬线）、排版原则。会被拼接到每一页的生图提示词里，保证全套风格一致。",
   "slides": [
     {
-      "type": "页面类型，取值见下",
       "title": "主标题，不超过12个字（数字和英文型号可以）",
       "subtitle": "副文案，不超过20个字，可为空字符串",
       "visual": "这一页的画面描述（60-150字）：主体是什么、构图、镜头、文字摆放位置。不要重复写全局风格。"
@@ -34,11 +22,18 @@ OUTLINE_SYSTEM = """你是顶级科技公司发布会的创意总监，同时精
   ]
 }
 
-页面类型：
-""" + "\n".join(f"- {k}：{v}" for k, v in SLIDE_TYPES.items()) + """
+可用的页面写法：
+- 封面：产品名 + 一句 slogan，主视觉是产品英雄图
+- 开场悬念：一句引发好奇的话，画面极简
+- 核心卖点：一个卖点标题 + 一句解释，配合特写画面
+- 参数大字报：一个巨大的数字或参数作为视觉主体
+- 对比：新旧/竞品的直观对比画面
+- 使用场景：产品在真实生活场景中
+- 价格与发售：价格、发售时间
+- 结尾：品牌 slogan 或 Thank you
 
 规则：
-- 第一页必须是 cover，最后一页必须是 ending。
+- 第一页必须是封面，最后一页必须是结尾。
 - 节奏要有发布会的起伏：悬念 → 卖点 → 参数震撼 → 场景 → 价格 → 收尾。
 - 用户没提供的具体参数可以合理虚构，但要可信。
 - visual 中如需出现额外文字（屏幕内容、数据标签），用引号写出确切内容，并说明位置，如：左侧标签“10d”、右侧标签“30d”。
@@ -83,7 +78,6 @@ async def generate_outline(topic: str, notes: str, style_text: str, page_count: 
     data = json.loads(raw)
     slides = [
         {
-            "type": s.get("type", "feature") if s.get("type") in SLIDE_TYPES else "feature",
             "title": str(s.get("title", "")).strip(),
             "subtitle": str(s.get("subtitle", "")).strip(),
             "visual": str(s.get("visual", "")).strip(),
@@ -96,18 +90,12 @@ async def generate_outline(topic: str, notes: str, style_text: str, page_count: 
 
 
 def _mock_outline(topic: str, page_count: int) -> dict:
-    types = ["cover", "hook", "feature", "spec", "feature", "compare", "scene", "spec", "price", "ending"]
-    if page_count < len(types):
-        types = types[: page_count - 1] + ["ending"]
-    else:
-        types = types[:-1] + ["feature"] * (page_count - len(types)) + ["ending"]
     slides = [
         {
-            "type": t,
-            "title": topic[:12] if t == "cover" else f"{t.upper()} 第{i + 1}页",
+            "title": topic[:12] if i == 0 else f"第{i + 1}页",
             "subtitle": "这是 Mock 模式下的占位文案",
-            "visual": f"{SLIDE_TYPES[t]}（Mock）",
+            "visual": "Mock 模式占位画面",
         }
-        for i, t in enumerate(types)
+        for i in range(page_count)
     ]
     return {"style_guide": "Mock 模式：深色背景，白色粗体大字。", "slides": slides}

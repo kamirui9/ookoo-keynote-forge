@@ -130,7 +130,6 @@ function renderCover() {
 }
 
 function renderSlides() {
-  const types = state.cfg.slide_types;
   const grid = $("#slide-grid");
   grid.innerHTML = "";
   others().forEach((s, j) => {
@@ -141,8 +140,6 @@ function renderSlides() {
       <div class="frame" data-frame="${s.uid}">${frameHTML(s)}</div>
       <div class="card-head">
         <span class="num">${String(i + 1).padStart(2, "0")}</span>
-        <select data-f="type">${Object.keys(types).map((t) =>
-          `<option value="${t}" ${t === s.type ? "selected" : ""}>${esc(types[t].split("：")[0])}</option>`).join("")}</select>
         <div class="tools">
           <button class="btn ghost" data-act="up" ${i === 1 ? "disabled" : ""} title="上移">↑</button>
           <button class="btn ghost" data-act="down" ${i === state.p.slides.length - 1 ? "disabled" : ""} title="下移">↓</button>
@@ -212,7 +209,7 @@ function renderWork() {
 function outlinePayload() {
   return {
     style_guide: state.p.style_guide,
-    slides: state.p.slides.map(({ uid, type, title, subtitle, visual }) => ({ uid, type, title, subtitle, visual })),
+    slides: state.p.slides.map(({ uid, title, subtitle, visual }) => ({ uid, title, subtitle, visual })),
   };
 }
 
@@ -252,7 +249,7 @@ function deleteSlide(i) {
 }
 
 $("#add-slide").addEventListener("click", () =>
-  structural((sl) => sl.splice(sl.length - 1, 0, { uid: null, type: "feature", title: "新卖点", subtitle: "", visual: "" })));
+  structural((sl) => sl.splice(sl.length - 1, 0, { uid: null, title: "新卖点", subtitle: "", visual: "" })));
 
 // ---------- 生成 ----------
 

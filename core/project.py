@@ -38,7 +38,6 @@ def new_project(topic: str, notes: str, style_id: str, custom_style: str,
 def new_slide(s: dict) -> dict:
     return {
         "uid": uuid.uuid4().hex[:8],
-        "type": s.get("type", "feature"),
         "title": s.get("title", ""),
         "subtitle": s.get("subtitle", ""),
         "visual": s.get("visual", ""),

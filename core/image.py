@@ -11,7 +11,6 @@ import httpx
 from PIL import Image, ImageDraw, ImageFont
 
 from . import config
-from .llm import SLIDE_TYPES
 
 NEGATIVE_PROMPT = (
     "低分辨率，模糊，文字错乱，乱码，错别字，多余的文字，水印，logo 变形，"
@@ -29,7 +28,6 @@ def build_prompt(style_guide: str, slide: dict, with_reference: bool, feedback: 
     lines += [
         "一张 16:9 横版的科技新品发布会主舞台大屏幻灯片，整页设计，画面精致、具有高级感，像真实发布会的 Keynote 页面。",
         f"【统一视觉规范】{style_guide}",
-        f"【本页类型】{SLIDE_TYPES.get(slide['type'], '')}",
         f"【画面】{slide['visual']}",
     ]
     text_parts = [f"主标题“{slide['title']}”"] if slide["title"] else []

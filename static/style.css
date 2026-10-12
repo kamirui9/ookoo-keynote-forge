@@ -165,8 +165,7 @@ input:focus, textarea:focus, select:focus { border-color: var(--accent); }
 .slide-card { background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
 .slide-card .card-head { display: flex; align-items: center; gap: 8px; }
 .slide-card .num { font-weight: 700; color: var(--muted); font-size: 13px; width: 26px; }
-.slide-card select { width: auto; padding: 6px 10px; font-size: 12px; }
-.slide-card input, .slide-card textarea, .slide-card select { background: var(--panel); }
+.slide-card input, .slide-card textarea { background: var(--panel); }
 .slide-card .tools { margin-left: auto; display: flex; gap: 2px; }
 .slide-card input, .slide-card textarea { font-size: 13px; padding: 8px 10px; }
 .slide-card .title-in { font-weight: 600; font-size: 14px; }
